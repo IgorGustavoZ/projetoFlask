@@ -6,11 +6,13 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Impressão de imagem</h1>
+    <h1>Impressão de imagem</h1>a
     <p>Selecione o arquivo</p>
-    <form action="print" method="post">
-        <input type="file" name="arq">
+    <form action="upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="arq" id="arq" accept="image/*">
         <input type="submit" value="Enviar">
     </form>
+
+    <script src="../static/script.js"></script>
 </body>
 </html>

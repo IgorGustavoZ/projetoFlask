@@ -1,20 +1,53 @@
-from main import app
-from flask import render_template, request, redirect
-from flask import request
+from werkzeug.utils import secure_filename
 
+from main import app
+from flask import render_template, request, redirect, jsonify
+
+import time
+import os
 import win32api
 
+UPLOAD_FOLDER = r"uploads"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route("/")
 def homepage():
     return render_template('index.html')
 
-@app.route("/print", methods=['POST'])
-def print():
+def excludeUpload(arquivos, caminho):
+    for arquivo in arquivos:
+        os.remove(os.path.join(caminho, arquivo))
+@app.route("/upload", methods=['POST'])
+def upload():
+    arquivos = os.listdir(r"C:\Users\V12 Informatica\Desktop\projetoFlask\uploads")
+
     try:
-        win32api.ShellExecute(0, "print", r"C:\Users\V12 Informatica\Desktop\projetoFlask\uploads\imprimir.jpg", None, ".", 0)
+        if(arquivos != None):
+
+            for arquivo in arquivos:
+                caminho = os.path.join(UPLOAD_FOLDER, arquivo)
+                win32api.ShellExecute(
+                    0, "print",
+                    caminho,
+                    None,
+                    ".",
+                    0)
+            time.sleep(10)
+            excludeUpload(arquivos, UPLOAD_FOLDER)
+        return redirect('/')
+    except Exception as e:
+        print("Ocorreu um erro de impressão: ", e)
+        return "Erro na impressão !"
+@app.route("/save", methods=['POST'])
+def save():
+    try:
+        file = request.files['arq']
+        file.filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
         return redirect("/")
-    except:
-        return "Erro na impressão"
+    except Exception as e:
+        print("Erro na instalação das imagens", e)
+        return redirect("Erro na instalação das imagens !")
+
 
 # @app.route("/soma", methods=['POST'])
 # def soma():
