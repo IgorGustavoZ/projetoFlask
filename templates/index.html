@@ -3,15 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <title>Impressão</title>
 </head>
 <body>
-    <h1>Impressão de imagem</h1>a
-    <p>Selecione o arquivo</p>
-    <form action="upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="arq" id="arq" accept="image/*">
-        <input type="submit" value="Enviar">
-    </form>
+    <header>
+        <img src="{{ url_for('static', filename='img/exemplo-logo.png') }}" alt="Logo">
+    </header>
+    <main>
+        <span id="select">
+            <h1>Impressão de imagem</h1>
+            <p>Selecione o arquivo abaixo : </p>       
+           
+            <input type="file" name="arq" id="arq" accept="image/*">
+            <div id="image-preview">
+                <img src="{{ url_for('static', filename='img/1.png') }}" alt="imagem 1 preview">
+            </div>
+        </span>
+        <span id="total">
+            <div id="lista">
+                <ul>
+                    <!-- <li>a</li> -->                 
+                </ul>
+            </div>
+            <div id="totalPag">
+                <!-- a -->
+            </div>
+        </span>
+        <span id="final">          
+            <form action="upload" method="post" enctype="multipart/form-data">
+                <input type="submit" value="Finalizar impressão">
+            </form>            
+        </span>
+    </main>
+    <footer>
+        <img src="{{ url_for('static', filename='img/exemplo-logo.png') }}" alt="Logo">
+    </footer>
+
+    
 
     <script src="../static/script.js"></script>
 </body>

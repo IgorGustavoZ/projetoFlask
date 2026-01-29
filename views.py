@@ -1,3 +1,5 @@
+from operator import countOf
+
 from werkzeug.utils import secure_filename
 
 from main import app
@@ -21,7 +23,7 @@ def excludeUpload(arquivos, caminho):
 #imprime os arquivos do diretório uploads.
 @app.route("/upload", methods=['POST'])
 def upload():
-    arquivos = os.listdir(r"C:\Users\V12 Informatica\Desktop\projetoFlask\uploads")
+    arquivos = os.listdir(UPLOAD_FOLDER)
 
     try:
         if(arquivos != None):
@@ -38,19 +40,27 @@ def upload():
             excludeUpload(arquivos, UPLOAD_FOLDER)
         return redirect('/')
     except Exception as e:
-        print("Ocorreu um erro de impressão: ", e)
+        print("Ocorreu um erro de impressão : ", e)
         return "Erro na impressão !"
 
+num = 0
 #Salvamento automático em uploads, chamado toda vez que o input file muda-se seu valor.
 @app.route("/save", methods=['POST'])
 def save():
     try:
+        num = os.listdir(UPLOAD_FOLDER).__len__() + 1
+        # -pega a imagem
         file = request.files.get('arq') # no get () o parametro usado é o atributo name do input file.
-        file.filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+        # -salva um nome seguro, sem riscos de segurança
+        file.filename = secure_filename(str(num) + "." + file.filename.rsplit('.', 1)[1].lower())
+        # -salva na pasta uploads com o seu nome
+        file.save(os.path.join(UPLOAD_FOLDER, file.filename))
+
+        file.save(os.path.join("static\img", file.filename))
+
         return redirect("/")
     except Exception as e:
-        print("Erro na instalação das imagens", e)
+        print("Erro na instalação das imagens : ", e)
         return redirect("Erro na instalação das imagens !")
 
 
